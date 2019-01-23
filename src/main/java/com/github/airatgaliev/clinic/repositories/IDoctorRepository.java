@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface IDoctorRepository {
 
-  public void addDoctor();
+  void addDoctor(Doctor doctor);
 
-  public Doctor getDoctorById();
+  Doctor getDoctorById(int id);
 
-  public List<Doctor> getDoctors();
+  List<Doctor> getDoctors();
 }

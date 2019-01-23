@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface ICalendarRepository {
 
-  public void addAppointment();
+  void addAppointment(Appointment appointment);
 
-  public Appointment getAppointmentById();
+  Appointment getAppointmentById(int id);
 
-  public List<Appointment> getAppointments();
+  List<Appointment> getAppointments();
 }
