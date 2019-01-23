@@ -4,15 +4,21 @@ import java.time.LocalDate;
 
 public class Appointment {
 
+  private Long id;
   private LocalDate localDate;
   private Doctor doctor;
   private Patient patient;
 
-  public Appointment(LocalDate localDate, Doctor doctor,
+  public Appointment(Long id, LocalDate localDate, Doctor doctor,
       Patient patient) {
+    this.id = id;
     this.localDate = localDate;
     this.doctor = doctor;
     this.patient = patient;
+  }
+
+  public Long getId() {
+    return id;
   }
 
   public LocalDate getLocalDate() {

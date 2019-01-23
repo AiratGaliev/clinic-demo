@@ -2,12 +2,18 @@ package com.github.airatgaliev.clinic.entities;
 
 public class Patient {
 
+  private Long id;
   private String firstName;
   private String lastName;
 
-  public Patient(String firstName, String lastName) {
+  public Patient(Long id, String firstName, String lastName) {
+    this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
+  }
+
+  public Long getId() {
+    return id;
   }
 
   public String getFirstName() {

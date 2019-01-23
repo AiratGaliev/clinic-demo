@@ -2,14 +2,20 @@ package com.github.airatgaliev.clinic.entities;
 
 public class Doctor {
 
+  private Long id;
   private String firstName;
   private String lastName;
   private String specialization;
 
-  public Doctor(String firstName, String lastName, String specialization) {
+  public Doctor(Long id, String firstName, String lastName, String specialization) {
+    this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.specialization = specialization;
+  }
+
+  public Long getId() {
+    return id;
   }
 
   public String getFirstName() {
