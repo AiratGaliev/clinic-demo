@@ -18,11 +18,6 @@ public class PatientRepositoryImpl implements IPatientRepository {
   }
 
   @Override
-  public Patient getPatientById(int id) {
-    return patients.get(id);
-  }
-
-  @Override
   public List<Patient> getPatients() {
     return patients;
   }

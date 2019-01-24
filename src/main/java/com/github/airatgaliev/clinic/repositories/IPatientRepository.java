@@ -7,7 +7,5 @@ public interface IPatientRepository {
 
   void addPatient(Patient patient);
 
-  Patient getPatientById(int id);
-
   List<Patient> getPatients();
 }

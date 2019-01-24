@@ -7,7 +7,5 @@ public interface ICalendarRepository {
 
   void addAppointment(Appointment appointment);
 
-  Appointment getAppointmentById(int id);
-
   List<Appointment> getAppointments();
 }

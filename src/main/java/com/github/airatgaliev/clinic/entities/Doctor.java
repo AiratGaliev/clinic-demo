@@ -1,44 +1,14 @@
 package com.github.airatgaliev.clinic.entities;
 
-public class Doctor {
+public enum Doctor {
+  martinez("John Martinez"), goodman("Ralf Goodman"), white("Walter White");
+  private String name;
 
-  private int id;
-  private String firstName;
-  private String lastName;
-  private String specialization;
-
-  public Doctor(int id, String firstName, String lastName, String specialization) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.specialization = specialization;
+  Doctor(String name) {
+    this.name = name;
   }
 
-  public int getId() {
-    return id;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-
-  public String getSpecialization() {
-    return specialization;
-  }
-
-  public void setSpecialization(String specialization) {
-    this.specialization = specialization;
+  public String getName() {
+    return name;
   }
 }

@@ -1,32 +1,26 @@
 package com.github.airatgaliev.clinic.entities;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Appointment {
 
-  private int id;
-  private LocalDate localDate;
+  private LocalDateTime localDateTime;
   private Doctor doctor;
   private Patient patient;
 
-  public Appointment(int id, LocalDate localDate, Doctor doctor,
+  public Appointment(LocalDateTime localDateTime, Doctor doctor,
       Patient patient) {
-    this.id = id;
-    this.localDate = localDate;
+    this.localDateTime = localDateTime;
     this.doctor = doctor;
     this.patient = patient;
   }
 
-  public int getId() {
-    return id;
+  public LocalDateTime getLocalDateTime() {
+    return localDateTime;
   }
 
-  public LocalDate getLocalDate() {
-    return localDate;
-  }
-
-  public void setLocalDate(LocalDate localDate) {
-    this.localDate = localDate;
+  public void setLocalDateTime(LocalDateTime localDateTime) {
+    this.localDateTime = localDateTime;
   }
 
   public Doctor getDoctor() {

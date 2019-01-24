@@ -18,11 +18,6 @@ public class CalendarRepositoryImpl implements ICalendarRepository {
   }
 
   @Override
-  public Appointment getAppointmentById(int id) {
-    return appointments.get(id);
-  }
-
-  @Override
   public List<Appointment> getAppointments() {
     return appointments;
   }
