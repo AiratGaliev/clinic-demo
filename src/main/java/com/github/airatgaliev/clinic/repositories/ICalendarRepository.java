@@ -8,4 +8,6 @@ public interface ICalendarRepository {
   void addAppointment(Appointment appointment);
 
   List<Appointment> getAppointments();
+
+  List<Appointment> getTodayAppointments();
 }

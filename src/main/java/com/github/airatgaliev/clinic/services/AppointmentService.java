@@ -6,14 +6,17 @@ import com.github.airatgaliev.clinic.entities.Patient;
 import com.github.airatgaliev.clinic.exceptions.DateTimeFormatException;
 import com.github.airatgaliev.clinic.repositories.ICalendarRepository;
 import com.github.airatgaliev.clinic.repositories.IPatientRepository;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class AppointmentService {
 
-  IPatientRepository patientRepository;
-  ICalendarRepository calendarRepository;
+  private IPatientRepository patientRepository;
+  private ICalendarRepository calendarRepository;
+  private LocalDate today;
 
   public AppointmentService(
       IPatientRepository patientRepository,
@@ -25,11 +28,19 @@ public class AppointmentService {
   public void setAppointment(String doctorKey, String patientLastName, String patientFirstName,
       String localDate) {
     Doctor doctor = Doctor.valueOf(doctorKey.toLowerCase());
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter
-        .ofPattern("M/d/yyyy h:mm a", Locale.US);
     LocalDateTime localDateTime;
     try {
-      localDateTime = LocalDateTime.parse(localDate.toUpperCase(), dateTimeFormatter);
+      if (localDate.toLowerCase().startsWith("today")) {
+        String[] parts = localDate.split(" ", 2);
+        LocalTime time = LocalTime
+            .parse(parts[1].toUpperCase(), DateTimeFormatter.ofPattern("h:mm a", Locale.US));
+        localDateTime = LocalDateTime.of(today, time);
+      }
+      else {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
+            .ofPattern("M/d/yyyy h:mm a", Locale.US);
+        localDateTime = LocalDateTime.parse(localDate.toUpperCase(), dateTimeFormatter);
+      }
     } catch (Exception e) {
       throw new DateTimeFormatException(
           "Unable to create date time from: [" + localDate.toUpperCase()
@@ -37,5 +48,10 @@ public class AppointmentService {
     }
     calendarRepository.addAppointment(
         new Appointment(localDateTime, doctor, new Patient(patientFirstName, patientLastName)));
+  }
+
+  public boolean hasAppointment(LocalDate date) {
+    return calendarRepository.getAppointments().stream()
+        .anyMatch(appointment -> appointment.getLocalDateTime().toLocalDate().equals(date));
   }
 }
