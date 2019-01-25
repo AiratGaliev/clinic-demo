@@ -26,14 +26,14 @@ public class AppointmentService {
       String localDate) {
     Doctor doctor = Doctor.valueOf(doctorKey.toLowerCase());
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter
-        .ofPattern("MM/dd/yyyy h:mm a", Locale.US);
+        .ofPattern("M/d/yyyy h:mm a", Locale.US);
     LocalDateTime localDateTime;
     try {
       localDateTime = LocalDateTime.parse(localDate.toUpperCase(), dateTimeFormatter);
     } catch (Exception e) {
       throw new DateTimeFormatException(
           "Unable to create date time from: [" + localDate.toUpperCase()
-              + "], please enter format [MM/dd/yyyy h:mm a]");
+              + "], please enter format [M/d/yyyy h:mm a]");
     }
     calendarRepository.addAppointment(
         new Appointment(localDateTime, doctor, new Patient(patientFirstName, patientLastName)));
