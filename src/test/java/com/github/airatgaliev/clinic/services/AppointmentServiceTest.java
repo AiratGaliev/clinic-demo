@@ -16,8 +16,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+@DisplayName("AppointmentService Should")
 class AppointmentServiceTest {
 
   private IPatientRepository patientRepository;
@@ -33,6 +35,7 @@ class AppointmentServiceTest {
   }
 
   @Test
+  @DisplayName("allow entry of appointment")
   public void allowEntryOfAppointment() {
     appointmentService.setAppointment("martinez", "Galiev", "Airat", "01/11/2019 2:15 pm");
     List<Appointment> appointments = calendarRepository.getAppointments();
@@ -47,17 +50,20 @@ class AppointmentServiceTest {
   }
 
   @Test
+  @DisplayName("return true for has appointments if there are appointments")
   public void returnTrueForHasAppointmentsIfThereAreAppointments() {
     appointmentService.setAppointment("martinez", "Galiev", "Airat", "01/11/2019 2:15 pm");
     assertTrue(appointmentService.hasAppointment(LocalDate.of(2019, 1, 11)));
   }
 
   @Test
+  @DisplayName("return false for has appointments if there are no appointments")
   public void returnFalseForHasAppointmentsIfThereAreNoAppointments() {
     assertFalse(appointmentService.hasAppointment(LocalDate.of(2019, 1, 11)));
   }
 
   @Test
+  @DisplayName("return current days appointments")
   public void returnCurrentDaysAppointments() {
     appointmentService.setAppointment("martinez", "Galiev", "Airat", "today 2:15 pm");
     appointmentService.setAppointment("goodman", "Galiev", "Airat", "today 3:15 pm");
