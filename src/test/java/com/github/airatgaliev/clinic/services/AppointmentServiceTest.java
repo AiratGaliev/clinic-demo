@@ -1,5 +1,6 @@
 package com.github.airatgaliev.clinic.services;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -42,11 +43,12 @@ class AppointmentServiceTest {
     assertNotNull(appointments);
     assertEquals(1, appointments.size());
     Appointment appointment = appointments.get(0);
-    assertEquals("Galiev", appointment.getPatient().getLastName());
-    assertEquals("Airat", appointment.getPatient().getFirstName());
-    assertSame(Doctor.martinez, appointment.getDoctor());
-    assertEquals("1/11/2019 2:15 PM",
-        appointment.getLocalDateTime().format(DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")));
+    assertAll(
+        () -> assertEquals("Galiev", appointment.getPatient().getLastName()),
+        () -> assertEquals("Airat", appointment.getPatient().getFirstName()),
+        () -> assertSame(Doctor.martinez, appointment.getDoctor()),
+        () -> assertEquals("1/11/2019 2:15 PM",
+            appointment.getLocalDateTime().format(DateTimeFormatter.ofPattern("M/d/yyyy h:mm a"))));
   }
 
   @Test
