@@ -14,9 +14,9 @@ import java.util.Locale;
 
 public class AppointmentService {
 
-  private IPatientRepository patientRepository;
-  private ICalendarRepository calendarRepository;
-  private LocalDate today;
+  private final IPatientRepository patientRepository;
+  private final ICalendarRepository calendarRepository;
+  private final LocalDate today = LocalDate.now();
 
   public AppointmentService(
       IPatientRepository patientRepository,
@@ -28,6 +28,14 @@ public class AppointmentService {
   public void setAppointment(String doctorKey, String patientLastName, String patientFirstName,
       String localDate) {
     Doctor doctor = Doctor.valueOf(doctorKey.toLowerCase());
+    Patient patient = new Patient(patientFirstName, patientLastName);
+    patientRepository.addPatient(patient);
+    LocalDateTime localDateTime = getDateTimeFromString(localDate);
+    calendarRepository.addAppointment(
+        new Appointment(localDateTime, doctor, patient));
+  }
+
+  private LocalDateTime getDateTimeFromString(String localDate) {
     LocalDateTime localDateTime;
     try {
       if (localDate.toLowerCase().startsWith("today")) {
@@ -35,19 +43,17 @@ public class AppointmentService {
         LocalTime time = LocalTime
             .parse(parts[1].toUpperCase(), DateTimeFormatter.ofPattern("h:mm a", Locale.US));
         localDateTime = LocalDateTime.of(today, time);
-      }
-      else {
+      } else {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter
             .ofPattern("M/d/yyyy h:mm a", Locale.US);
         localDateTime = LocalDateTime.parse(localDate.toUpperCase(), dateTimeFormatter);
       }
     } catch (Exception e) {
       throw new DateTimeFormatException(
-          "Unable to create date time from: [" + localDate.toUpperCase()
-              + "], please enter format [M/d/yyyy h:mm a]");
+          "Unable to create date time from: [" + localDate
+              + "], please enter format [M/d/yyyy h:mm a], " + e.getMessage());
     }
-    calendarRepository.addAppointment(
-        new Appointment(localDateTime, doctor, new Patient(patientFirstName, patientLastName)));
+    return localDateTime;
   }
 
   public boolean hasAppointment(LocalDate date) {

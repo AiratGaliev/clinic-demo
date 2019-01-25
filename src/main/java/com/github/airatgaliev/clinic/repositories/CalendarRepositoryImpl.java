@@ -8,12 +8,10 @@ import java.util.stream.Collectors;
 
 public class CalendarRepositoryImpl implements ICalendarRepository {
 
-  private Calendar calendar;
-  private LocalDate today;
+  private final Calendar calendar;
 
-  public CalendarRepositoryImpl(LocalDate today) {
-    this.today = today;
-    this.calendar = new Calendar(today);
+  public CalendarRepositoryImpl() {
+    this.calendar = new Calendar();
   }
 
   @Override
@@ -30,7 +28,7 @@ public class CalendarRepositoryImpl implements ICalendarRepository {
   public List<Appointment> getTodayAppointments() {
     return calendar.getAppointments().stream()
         .filter(
-            appointment -> appointment.getLocalDateTime().toLocalDate().equals(today))
+            appointment -> appointment.getLocalDateTime().toLocalDate().equals(LocalDate.now()))
         .collect(Collectors.toList());
   }
 }

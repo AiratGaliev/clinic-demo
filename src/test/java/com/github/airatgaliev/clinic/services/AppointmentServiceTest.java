@@ -25,9 +25,9 @@ class AppointmentServiceTest {
   private AppointmentService appointmentService;
 
   @BeforeEach
-  private void init() {
+  public void init() {
     patientRepository = new PatientRepositoryImpl();
-    calendarRepository = new CalendarRepositoryImpl(LocalDate.now());
+    calendarRepository = new CalendarRepositoryImpl();
     appointmentService = new AppointmentService(patientRepository,
         calendarRepository);
   }
@@ -55,5 +55,13 @@ class AppointmentServiceTest {
   @Test
   public void returnFalseForHasAppointmentsIfThereAreNoAppointments() {
     assertFalse(appointmentService.hasAppointment(LocalDate.of(2019, 1, 11)));
+  }
+
+  @Test
+  public void returnCurrentDaysAppointments() {
+    appointmentService.setAppointment("martinez", "Galiev", "Airat", "today 2:15 pm");
+    appointmentService.setAppointment("goodman", "Galiev", "Airat", "today 3:15 pm");
+    appointmentService.setAppointment("white", "Galiev", "Airat", "01/11/2019 2:15 pm");
+    assertEquals(2, calendarRepository.getTodayAppointments().size());
   }
 }
