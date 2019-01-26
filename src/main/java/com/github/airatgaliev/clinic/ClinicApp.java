@@ -6,8 +6,10 @@ import com.github.airatgaliev.clinic.repositories.ICalendarRepository;
 import com.github.airatgaliev.clinic.repositories.IPatientRepository;
 import com.github.airatgaliev.clinic.repositories.PatientRepositoryImpl;
 import com.github.airatgaliev.clinic.services.AppointmentService;
+import com.github.airatgaliev.clinic.services.BMICalculationService;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class ClinicApp {
@@ -34,6 +36,7 @@ public class ClinicApp {
     System.out.println("1. Enter patient appointment");
     System.out.println("2. View all appointments");
     System.out.println("3. View today's appointments");
+    System.out.println("4. Enter Patient Height and Weight");
     System.out.println("x. Exit");
     System.out.print("Option: ");
     String option = scanner.next();
@@ -46,6 +49,9 @@ public class ClinicApp {
         return option;
       case "3":
         performTodaysAppointments();
+        return option;
+      case "4":
+        performHeightWeight(scanner);
         return option;
       default:
         System.out.println("Invalid option, please re-enter");
@@ -99,5 +105,34 @@ public class ClinicApp {
     System.out.println("\nPress any key to continue...");
     System.in.read();
     System.out.println("\n\n");
+  }
+
+  private static void performHeightWeight(Scanner scanner) {
+    scanner.nextLine();
+    System.out.println("\n\nPlease enter height and weight for today's appointment:");
+    System.out.print(" Patient last name: ");
+    String patientLastName = scanner.nextLine();
+    System.out.print(" Patient first name: ");
+    String patientFirstName = scanner.nextLine();
+    Appointment appointment = findAppointment(patientLastName, patientFirstName).orElse(null);
+    if (appointment != null) {
+      System.out.print(" Height in Inches: ");
+      int inches = scanner.nextInt();
+      System.out.print(" Weight in Pounds: ");
+      int pounds = scanner.nextInt();
+      double resultCalculateBMI = new BMICalculationService(inches, pounds).calculateBMI();
+      appointment.setBmi(resultCalculateBMI);
+      System.out.println("Set patient BMI to " + resultCalculateBMI + "\n\n");
+    } else {
+      System.out.println("Patient not found.\n\n");
+    }
+  }
+
+  private static Optional<Appointment> findAppointment(String patientLastName,
+      String patientFirstName) {
+    return calendarRepository.getTodayAppointments().stream()
+        .filter(patient -> patient.getPatient().getLastName().equalsIgnoreCase(patientLastName)
+            && patient.getPatient().getFirstName().equalsIgnoreCase(patientFirstName))
+        .findFirst();
   }
 }

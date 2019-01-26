@@ -7,6 +7,7 @@ public class Appointment {
   private LocalDateTime localDateTime;
   private Doctor doctor;
   private Patient patient;
+  private double bmi;
 
   public Appointment(LocalDateTime localDateTime, Doctor doctor,
       Patient patient) {
@@ -37,5 +38,13 @@ public class Appointment {
 
   public void setPatient(Patient patient) {
     this.patient = patient;
+  }
+
+  public double getBmi() {
+    return bmi;
+  }
+
+  public void setBmi(double bmi) {
+    this.bmi = bmi;
   }
 }
