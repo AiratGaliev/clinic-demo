@@ -102,11 +102,13 @@ class AppointmentServiceTest {
   class UpcomingAppointments {
 
     @Test
+    @DisplayName("when there are none")
     public void whenThereAreNone() {
       assertEquals(0, calendarRepository.getUpcomingAppointments().size());
     }
 
     @Test
+    @DisplayName("when there are some past and future")
     public void whenThereAreSomePastAndFuture() {
       String pastDate = String
           .format("%s/%s/%s", LocalDate.now().minusYears(1).getMonthValue(),
