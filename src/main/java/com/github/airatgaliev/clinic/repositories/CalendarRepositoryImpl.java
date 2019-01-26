@@ -41,4 +41,12 @@ public class CalendarRepositoryImpl implements ICalendarRepository {
             appointment -> appointment.getLocalDateTime().toLocalDate()
                 .equals(localDate.plusDays(1))).collect(Collectors.toList());
   }
+
+  @Override
+  public List<Appointment> getUpcomingAppointments() {
+    return calendar.getAppointments().stream()
+        .filter(
+            appointment -> appointment.getLocalDateTime().toLocalDate()
+                .isAfter(LocalDate.now())).collect(Collectors.toList());
+  }
 }

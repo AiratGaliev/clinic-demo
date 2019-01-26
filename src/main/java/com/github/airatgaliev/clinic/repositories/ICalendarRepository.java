@@ -12,4 +12,6 @@ public interface ICalendarRepository {
   List<Appointment> getTodayAppointments();
 
   List<Appointment> getTomorrowAppointments();
+
+  List<Appointment> getUpcomingAppointments();
 }

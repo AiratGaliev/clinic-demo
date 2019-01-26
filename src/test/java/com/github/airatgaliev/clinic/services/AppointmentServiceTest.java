@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("AppointmentService Should")
@@ -51,25 +52,74 @@ class AppointmentServiceTest {
             appointment.getLocalDateTime().format(DateTimeFormatter.ofPattern("M/d/yyyy h:mm a"))));
   }
 
-  @Test
-  @DisplayName("return true for has appointments if there are appointments")
-  public void returnTrueForHasAppointmentsIfThereAreAppointments() {
-    appointmentService.setAppointment("martinez", "Galiev", "Airat", "01/11/2019 2:15 pm");
-    assertTrue(appointmentService.hasAppointment(LocalDate.of(2019, 1, 11)));
+  @Nested
+  @DisplayName("indicate if there are appointments correctly")
+  class HasAppointments {
+
+    @Test
+    @DisplayName("when there are appointments")
+    public void returnTrueForHasAppointmentsIfThereAreAppointments() {
+      appointmentService.setAppointment("martinez", "Galiev", "Airat", "01/11/2019 2:15 pm");
+      assertTrue(appointmentService.hasAppointment(LocalDate.of(2019, 1, 11)));
+    }
+
+    @Test
+    @DisplayName("when there are no appointments")
+    public void returnFalseForHasAppointmentsIfThereAreNoAppointments() {
+      assertFalse(appointmentService.hasAppointment(LocalDate.of(2019, 1, 11)));
+    }
   }
 
-  @Test
-  @DisplayName("return false for has appointments if there are no appointments")
-  public void returnFalseForHasAppointmentsIfThereAreNoAppointments() {
-    assertFalse(appointmentService.hasAppointment(LocalDate.of(2019, 1, 11)));
+  @Nested
+  @DisplayName("return appointments correctly")
+  class AppointmentsForDay {
+
+    @Test
+    @DisplayName("for today")
+    public void returnCurrentDaysAppointments() {
+      appointmentService.setAppointment("martinez", "Galiev", "Airat", "today 2:15 pm");
+      appointmentService.setAppointment("goodman", "Galiev", "Airat", "today 3:15 pm");
+      appointmentService.setAppointment("white", "Galiev", "Airat", "01/11/2019 2:15 pm");
+      assertEquals(2, calendarRepository.getTodayAppointments().size());
+    }
+
+    @Test
+    @DisplayName("for tomorrow")
+    public void returnTomorrowsAppointments() {
+      LocalDate tomorrow = LocalDate.now().plusDays(1);
+      String localDate = String
+          .format("%s/%s/%s", tomorrow.getMonthValue(), tomorrow.getDayOfMonth(),
+              tomorrow.getYear());
+      appointmentService.setAppointment("martinez", "Galiev", "Airat", localDate + " 2:15 pm");
+      appointmentService.setAppointment("goodman", "Galiev", "Airat", localDate + " 3:15 pm");
+      appointmentService.setAppointment("white", "Galiev", "Airat", "01/11/2019 2:15 pm");
+      assertEquals(2, calendarRepository.getTomorrowAppointments().size());
+    }
   }
 
-  @Test
-  @DisplayName("return current days appointments")
-  public void returnCurrentDaysAppointments() {
-    appointmentService.setAppointment("martinez", "Galiev", "Airat", "today 2:15 pm");
-    appointmentService.setAppointment("goodman", "Galiev", "Airat", "today 3:15 pm");
-    appointmentService.setAppointment("white", "Galiev", "Airat", "01/11/2019 2:15 pm");
-    assertEquals(2, calendarRepository.getTodayAppointments().size());
+  @Nested
+  @DisplayName("return upcoming appointments")
+  class UpcomingAppointments {
+
+    @Test
+    public void whenThereAreNone() {
+      assertEquals(0, calendarRepository.getUpcomingAppointments().size());
+    }
+
+    @Test
+    public void whenThereAreSomePastAndFuture() {
+      String pastDate = String
+          .format("%s/%s/%s", LocalDate.now().minusYears(1).getMonthValue(),
+              LocalDate.now().minusYears(1).getDayOfMonth(),
+              LocalDate.now().minusYears(1).getYear());
+      String futureDate = String
+          .format("%s/%s/%s", LocalDate.now().plusMonths(1).getMonthValue(),
+              LocalDate.now().plusMonths(1).getDayOfMonth(),
+              LocalDate.now().plusMonths(1).getYear());
+      appointmentService.setAppointment("martinez", "Galiev", "Airat", pastDate + " 2:15 pm");
+      appointmentService.setAppointment("goodman", "Galiev", "Airat", pastDate + " 3:15 pm");
+      appointmentService.setAppointment("white", "Galiev", "Airat", futureDate + " 2:15 pm");
+      assertEquals(1, calendarRepository.getUpcomingAppointments().size());
+    }
   }
 }
