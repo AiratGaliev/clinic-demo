@@ -8,6 +8,7 @@ import com.github.airatgaliev.clinic.repositories.PatientRepositoryImpl;
 import com.github.airatgaliev.clinic.services.AppointmentService;
 import com.github.airatgaliev.clinic.services.BMICalculationService;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.Scanner;
@@ -20,7 +21,7 @@ public class ClinicApp {
 
   public static void main(String[] args) throws IOException {
     patientRepository = new PatientRepositoryImpl();
-    calendarRepository = new CalendarRepositoryImpl();
+    calendarRepository = new CalendarRepositoryImpl(LocalDate.now());
     appointmentService = new AppointmentService(patientRepository, calendarRepository);
     Scanner scanner = new Scanner(System.in);
     System.out.println("Welcome patient intake system!\n\n");

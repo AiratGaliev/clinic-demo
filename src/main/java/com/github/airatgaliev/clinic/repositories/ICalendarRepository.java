@@ -10,4 +10,6 @@ public interface ICalendarRepository {
   List<Appointment> getAppointments();
 
   List<Appointment> getTodayAppointments();
+
+  List<Appointment> getTomorrowAppointments();
 }

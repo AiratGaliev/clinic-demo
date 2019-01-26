@@ -9,9 +9,11 @@ import java.util.stream.Collectors;
 public class CalendarRepositoryImpl implements ICalendarRepository {
 
   private final Calendar calendar;
+  private final LocalDate localDate;
 
-  public CalendarRepositoryImpl() {
-    this.calendar = new Calendar();
+  public CalendarRepositoryImpl(LocalDate localDate) {
+    this.localDate = localDate;
+    this.calendar = new Calendar(localDate);
   }
 
   @Override
@@ -30,5 +32,13 @@ public class CalendarRepositoryImpl implements ICalendarRepository {
         .filter(
             appointment -> appointment.getLocalDateTime().toLocalDate().equals(LocalDate.now()))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Appointment> getTomorrowAppointments() {
+    return calendar.getAppointments().stream()
+        .filter(
+            appointment -> appointment.getLocalDateTime().toLocalDate()
+                .equals(localDate.plusDays(1))).collect(Collectors.toList());
   }
 }

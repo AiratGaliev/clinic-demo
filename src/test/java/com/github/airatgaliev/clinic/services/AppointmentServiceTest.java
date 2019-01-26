@@ -30,7 +30,7 @@ class AppointmentServiceTest {
   @BeforeEach
   public void init() {
     patientRepository = new PatientRepositoryImpl();
-    calendarRepository = new CalendarRepositoryImpl();
+    calendarRepository = new CalendarRepositoryImpl(LocalDate.now());
     appointmentService = new AppointmentService(patientRepository,
         calendarRepository);
   }
